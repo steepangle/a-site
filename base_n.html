@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>base.n</title>
+    <link rel="icon" href="../images/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div class="navbar">
+        <h1>base.n</h1>
+        <button onclick="logout()">a-Logout</button>
+    </div>
+
+    <div class="main-content">
+        <table>
+            <thead>
+                <tr>
+                    <th>Base</th>
+                    <th>Input</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>BIN</td>
+                    <td><input id="binInput" type="text" placeholder="enter BIN number"></td>
+                    <td class="out" id="binResult"></td>
+                </tr>
+                <tr>
+                    <td>OCT</td>
+                    <td><input id="octInput" type="text" placeholder="enter OCT number"></td>
+                    <td class="out" id="octResult"></td>
+                </tr>
+                <tr>
+                    <td>HEX</td>
+                    <td><input id="hexInput" type="text" placeholder="enter HEX number"></td>
+                    <td class="out" id="hexResult"></td>
+                </tr>
+                <tr>
+                    <td>DEC</td>
+                    <td><input id="decInput" type="text" placeholder="enter DEC number"></td>
+                    <td class="out" id="decResult"></td>
+                </tr>
+                
+            </tbody>
+        </table>
+    </div>
+    <script src="../calc/base_n.js"></script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Density Calculator</title>
+    <link rel="icon" href="../images/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div class="navbar">
+        <h1>Density Calculator</h1>
+        <button onclick="logout()">a-Logout</button>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <h2>Calculate Mass and Volume</h2>
+            <input type="number" id="density" placeholder="Enter the density in kg/m³">
+            <select id="shape">
+                <option value="s">Sphere</option>
+                <option value="c">Cube</option>
+                <option value="u">Cuboid</option>
+                <option value="y">Cylinder</option>
+            </select>
+            <div id="shape-inputs"></div>
+            <button onclick="calculate()">Calculate</button>
+            <h3>Output:</h3>
+            <p id="output">The mass and volume will appear here.</p>
+        </div>
+    </div>
+    <script src="../calc/density.js"></script>
+</body>
+</html>

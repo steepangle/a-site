@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>super Cipher</title>
+    <link rel="icon" href="../images/favicon3.png" type="image/png">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div class="navbar">
+        <h1>Secured Area</h1>
+        <button onclick="logout()">a-Logout</button>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <h2>a-Ciphering Tool for ArKi</h2>
+            <textarea id="message" placeholder="Enter your message here..."></textarea>
+            <input type="number" id="key" placeholder="Enter the key [int]">
+            <div>
+                <button onclick="encryptMessage()">Encrypt</button>
+                <button onclick="decryptMessage()">Decrypt</button>
+            </div>
+            <h3>Output:</h3>
+            <p id="output">Your encrypted/decrypted message will appear here.</p>
+        </div>
+    </div>
+    <script src="../calc/cipher.js"></script>
+</body>
+</html>

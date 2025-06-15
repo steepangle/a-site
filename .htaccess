@@ -1,0 +1,13 @@
+Header set Access-Control-Allow-Origin "https://a-site.42web.io"
+php_value date.timezone Europe/Vienna
+
+# Redirections
+Redirect 301 /linktree Https://linktr.ee/flo.thehoe
+
+# Error Pages
+ErrorDocument 400 /ErrorPages/error400.html
+ErrorDocument 401 /ErrorPages/error401.html
+ErrorDocument 403 /ErrorPages/error403.html
+ErrorDocument 404 /ErrorPages/error404.html
+ErrorDocument 500 /ErrorPages/error500.html
+ErrorDocument 503 /ErrorPages/error503.html
