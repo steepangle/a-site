@@ -14,10 +14,6 @@ function hashSHA256(input) {
     return CryptoJS.SHA256(input).toString();
 }
 
-function logout() {
-    window.location.href = './index.html';
-}
-
 async function login() {
     const username = document.getElementById('usernameInput').value;
     const password = document.getElementById('passwordInput').value;

@@ -22,20 +22,6 @@ input, select {
     font-family: Consolas, monospace;
 }
 
-.navbar {
-    background-color: #0dc713;
-    position: sticky;
-    top: 0;
-    display: inline;
-    height: 60px;
-    width: 100%;
-    text-indent: 10px;
-}
-
-.navbar h1{
-    font-size: 1.5rem;
-}
-
 .navbar button {
     position: absolute;
     right: 20px;
@@ -47,6 +33,44 @@ input, select {
     border-radius: 4px;
     cursor: pointer;
     font-size: 1rem;
+}
+
+div.navbar {
+    width: 100%;
+}
+
+.navbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #0dc713;
+    top: 0;
+}
+
+.navbar li {
+    float: left;
+}
+
+.navbar li.logout {
+    float: right;
+    background-color: #fe0000;
+}
+
+.navbar li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.navbar li a:hover:not(.active) {
+    background-color: #00000020;
+}
+
+.navbar li a.active {
+    background-color: #0067a7;
 }
 
 .main-content {
