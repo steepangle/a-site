@@ -15,21 +15,6 @@
   - 700: Bold
 */
 
-/* Noto
-  font-family: "Noto Sans", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
-  font-variation-settings:
-    "wdth" 100;
-*/
-
-/* Ubuntu
-  font-family: "Ubuntu", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-*/
-
 body {
     font-family: "Ubuntu", Arial, sans-serif;
     background-color: #121212;
