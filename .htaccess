@@ -24,6 +24,3 @@ ErrorDocument 503 /errorPages/error503.html
 <Files ".htaccess">
   Require all denied
 </Files>
-<Files "credentials.json">
-  Require all denied
-</Files>
