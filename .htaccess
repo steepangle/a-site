@@ -1,8 +1,7 @@
-Header set Access-Control-Allow-Origin "https://a-site.42web.io"
 php_value date.timezone Europe/Vienna
 
 # Redirections
-Redirect 301 /linktree Https://linktr.ee/flo.thehoe
+Redirect 301 /linktree https://linktr.ee/flo.thehoe
 
 # Error Pages
 ErrorDocument 400 /errorPages/error400.html
