@@ -5,9 +5,9 @@ php_value date.timezone Europe/Vienna
 Redirect 301 /linktree Https://linktr.ee/flo.thehoe
 
 # Error Pages
-ErrorDocument 400 /ErrorPages/error400.html
-ErrorDocument 401 /ErrorPages/error401.html
-ErrorDocument 403 /ErrorPages/error403.html
-ErrorDocument 404 /ErrorPages/error404.html
-ErrorDocument 500 /ErrorPages/error500.html
-ErrorDocument 503 /ErrorPages/error503.html
+ErrorDocument 400 /errorPages/error400.html
+ErrorDocument 401 /errorPages/error401.html
+ErrorDocument 403 /errorPages/error403.html
+ErrorDocument 404 /errorPages/error404.html
+ErrorDocument 500 /errorPages/error500.html
+ErrorDocument 503 /errorPages/error503.html
