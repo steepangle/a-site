@@ -1,3 +1,3 @@
 # a-site
 
-Repo containing files for a-site.uk
+official a-Site repository
