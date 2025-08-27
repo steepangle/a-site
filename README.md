@@ -1,4 +1,5 @@
 # a-site
 
-official a-Site repository
+official a-Site.uk repository
 containing all web files
+managed by steepangle AG
