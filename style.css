@@ -74,6 +74,11 @@ div.navbar {
     background-color: #fe0000;
 }
 
+.navbar li.steepangle {
+    float: right;
+    background-color: #646e83;
+}
+
 .navbar li a {
   display: block;
   color: white;
