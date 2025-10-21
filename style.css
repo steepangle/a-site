@@ -167,3 +167,9 @@ a:hover {
     color:#e97600;
     text-decoration: underline;
 }
+
+.big {
+    font-family: "Noto Sans Mono", sans-serif;
+    font-size: 5rem;
+    font-weight: 100;
+}

@@ -32,7 +32,7 @@ function updateCountdown() {
     document.getElementById("time").textContent =
         `${hrs.toString().padStart(2, "0")}:${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
     document.getElementById("next").textContent =
-        `Next HARALD at ${target.getHours().toString().padStart(2, "0")}:${target.getMinutes().toString().padStart(2, "0")}`;
+        `next HARALD at ${target.getHours().toString().padStart(2, "0")}:${target.getMinutes().toString().padStart(2, "0")}`;
 }
 
 let target = getNextTarget();
