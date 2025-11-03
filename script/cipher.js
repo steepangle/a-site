@@ -32,7 +32,3 @@ function decryptMessage() {
     const decrypted = encryptCaesar(message, -key);
     document.getElementById("output").textContent = decrypted;
 }
-
-function logout() {
-    href = "../index.html";
-}

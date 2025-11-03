@@ -44,7 +44,3 @@ function calculate() {
 }
 
 updateShapeInputs();
-
-function logout() {
-    href = "../index.html";
-}

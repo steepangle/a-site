@@ -58,7 +58,3 @@ document.getElementById('binInput').addEventListener('input', () => updateResult
 document.getElementById('octInput').addEventListener('input', () => updateResults('octInput', 'oct'));
 document.getElementById('decInput').addEventListener('input', () => updateResults('decInput', 'dec'));
 document.getElementById('hexInput').addEventListener('input', () => updateResults('hexInput', 'hex'));
-
-function logout() {
-    href = "https://a-site.42-web.io/index.html";
-}
