@@ -13,9 +13,12 @@
             <h2>a-Login</h2>
             <input type="text" id="usernameInput" placeholder="username">
             <input type="password" id="passwordInput" placeholder="a-ID">
+            <ul class="buttonOrLink">
+                <li> <button class="login-button" onclick="login()">a-Login</button> </li>
+                <li class="right"> <a href="https://steepangle.uk">steepangle AG</a> </li>
+            </ul>
             <br>
-            <button class="login-button" onclick="login()">a-Login</button>
-            <div class="error" id="errorMessage"></div>
+            <div style="margin-top: 40px; color: crimson;" class="error" id="errorMessage"></div>
         </div>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>

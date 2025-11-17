@@ -158,6 +158,22 @@ textarea{
     font-size: 1rem;
 }
 
+ul.buttonOrLink {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+ul.buttonOrLink li.right {
+    float: right;
+    margin-right: 11px;
+    margin-top: 15px;
+}
+
+ul.buttonOrLink li {
+    float: left;
+}
+
 a {
     color: #a2a7ad;
     text-decoration: none;
