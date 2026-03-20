@@ -35,6 +35,37 @@ function updateCountdown() {
         `next HARALD at ${target.getHours().toString().padStart(2, "0")}:${target.getMinutes().toString().padStart(2, "0")}`;
 }
 
+function updateCountdown() {
+    const now = new Date();
+    let diff = target - now;
+
+    if (diff <= 0) {
+        target = getNextTarget();
+        diff = target - now;
+    }
+
+    const hrs = Math.floor(diff / 1000 / 60 / 60);
+    const mins = Math.floor((diff / 1000 / 60) % 60);
+    const secs = Math.floor((diff / 1000) % 60);
+
+    document.getElementById("time").textContent =
+        `${hrs.toString().padStart(2, "0")}:${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+
+    document.getElementById("next").textContent =
+        `next HARALD at ${target.getHours().toString().padStart(2, "0")}:${target.getMinutes().toString().padStart(2, "0")}`;
+
+    document.getElementById("day").textContent =
+        `Day No. ${getDayNumber(now)}`;
+}
+
+function getDayNumber(date = new Date()) {
+    const startOfYear = new Date(date.getFullYear(), 0, 1);
+    const diff = date - startOfYear;
+    const oneDay = 1000 * 60 * 60 * 24;
+
+    return Math.floor(diff / oneDay) + 1;
+}
+
 let target = getNextTarget();
 updateCountdown();
 setInterval(updateCountdown, 1000);
