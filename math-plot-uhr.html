@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uhr</title>
+    <link rel="icon" href="./media/logo-steepangle.png" type="img/png">
+    <link rel="stylesheet" href="./style.css" type="text/css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #222;
+            color: white;
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        canvas {
+            background-color: white;
+            max-width: 95vw;
+            max-height: 95vh;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="mathCanvas"></canvas>
+
+    <script>
+        // --- 1. EINSTELLUNGEN ---
+        const WIDTH = 1600;
+        const HEIGHT = 1000;
+
+        const x1 = -8;
+        const x2 = 8;
+        const y1 = -5;
+        const y2 = 5;
+
+        // --- 2. CANVAS INITIALISIEREN ---
+        const canvas = document.getElementById('mathCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = WIDTH;
+        canvas.height = HEIGHT;
+
+        function mathToCanvas(mathX, mathY) {
+            const cx = ((mathX - x1) / (x2 - x1)) * WIDTH;
+            const cy = HEIGHT - ((mathY - y1) / (y2 - y1)) * HEIGHT;
+            return { cx, cy };
+        }
+
+        // --- 3. FUNKTIONEN: putPixel und putText---
+        function putPixel(x, y, r, g, b, thickness = 1) {
+            const { cx, cy } = mathToCanvas(x, y);
+            ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+            ctx.fillRect(cx - thickness / 2, cy - thickness / 2, thickness, thickness);
+        }
+
+        function putText(text, x, y, r, g, b, size = 16) {
+            // 1. Mathe-Koordinaten in Canvas-Pixel umrechnen
+            const { cx, cy } = mathToCanvas(x, y);
+
+            // 2. Farbe und Schriftart setzen
+            ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+            ctx.font = `${size}px Arial, sans-serif`;
+
+            // 3. Ausrichtung anpassen (damit der Text genau auf dem Punkt (x,y) sitzt)
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+
+            // 4. Text auf die Canvas zeichnen
+            ctx.fillText(text, cx, cy);
+        }
+
+        // --- 4. KOORDINATENSYSTEM ZEICHNEN ---
+        function drawCoordinateSystem() {
+            ctx.strokeStyle = "#ccc";
+            ctx.fillStyle = "#333";
+            ctx.font = "14px Arial";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+
+            const origin = mathToCanvas(0, 0);
+
+            ctx.beginPath();
+            ctx.moveTo(0, origin.cy);
+            ctx.lineTo(WIDTH, origin.cy);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(origin.cx, 0);
+            ctx.lineTo(origin.cx, HEIGHT);
+            ctx.stroke();
+
+            for (let i = Math.ceil(x1); i <= Math.floor(x2); i++) {
+                const pos = mathToCanvas(i, 0);
+                ctx.beginPath();
+                ctx.moveTo(pos.cx, origin.cy - 5);
+                ctx.lineTo(pos.cx, origin.cy + 5);
+                ctx.stroke();
+                if (i !== 0) ctx.fillText(i, pos.cx, origin.cy + 15);
+            }
+
+            for (let i = Math.ceil(y1); i <= Math.floor(y2); i++) {
+                const pos = mathToCanvas(0, i);
+                ctx.beginPath();
+                ctx.moveTo(origin.cx - 5, pos.cy);
+                ctx.lineTo(origin.cx + 5, pos.cy);
+                ctx.stroke();
+                if (i !== 0) ctx.fillText(i, origin.cx - 15, pos.cy);
+            }
+        }
+
+        // Hilfsfunktion sleep
+        function sleep(ms) {
+            return new Promise(function (resolve) {
+                setTimeout(resolve, ms);
+            });
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////
+        // NUR INNEHALB DER NACHFOLGENDEN FUNKTION ZEICHNEN DARF ETWAS VERÄNDERT WERDEN
+        // UND ES SIND NUR FOLGENDE DINGE ERLAUB:
+        //    * Aufruf der Funktion "putPixel(...)" oder "putText(...)"
+        //    * Aufruf von "await sleep(Millisekunden)"
+        //    * Variablendefinitionen und for-Schleifen
+        //    * drawCoordinateSystem() auskommentieren oder nicht
+        ///////////////////////////////////////////////////////////////////////////////
+        // ANFANG ZEICHENBEREICH //////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////
+
+        async function zeichnen() {
+            // drawCoordinateSystem();
+
+            // Ziffernblatt
+            for (let t = 0; t <= (2 * Math.PI); t += 0.001) {
+                putPixel(4 * Math.cos(t), 4 * Math.sin(t), 0, 0, 0, 4);
+            }
+
+            // Minuten- und Stundenstriche (60x)
+            for (let i = 0; i < 60; i++) {
+                let winkel = (i * 2 * Math.PI) / 60;
+
+                let startRadius = 3.7; // Standard-Startpunkt für kleine Minutenstriche
+                let dicke = 2;         // Standard-Dicke
+
+                if (i % 5 === 0) {
+                    // Volle Stunde
+                    startRadius = 3.5; // Längerer Strich
+                    dicke = 5;         // Fett
+                    
+                    if (i % 15 === 0) {
+                        // Die Hauptstunden:
+                        startRadius = 3.3; // Noch länger
+                        dicke = 9;         // Extra fett
+                    }
+                }
+
+                // Strich zeichnen
+                for (let r = startRadius; r <= 4.0; r += 0.01) {
+                    let x = r * Math.cos(winkel);
+                    let y = r * Math.sin(winkel);
+                    putPixel(x, y, 0, 0, 0, dicke);
+                }
+            }
+
+            // Alle Stundenzahlen von 1 bis 12 automatisch platzieren
+            for (let stunde = 1; stunde <= 12; stunde++) {
+                
+                let winkelZahl = (Math.PI / 2) - (stunde * (Math.PI / 6));
+                
+                let xZahl = 3 * Math.cos(winkelZahl);
+                let yZahl = 3 * Math.sin(winkelZahl);
+
+                // Hauptstunden größer
+                let groesse = (stunde % 3 === 0) ? 40 : 24;
+
+                putText(stunde.toString(), xZahl, yZahl, 0, 0, 0, groesse);
+            }
+
+            // MINUTENZEIGER (senkrecht)
+            for (let l = 0; l <= 3.5; l += 0.01) {
+                putPixel(0, l, 0, 0, 255, 4); // Blauer Zeiger
+            }
+
+            // STUNDENZEIGER für (14:00)
+            const winkelStunde = Math.PI / 6; // Winkel pro Stunde
+
+            for (let l = 0; l <= 2.3; l += 0.01) {
+                let x = l * Math.cos(winkelStunde);
+                let y = l * Math.sin(winkelStunde);
+                putPixel(x, y, 255, 0, 0, 6); // Roter Zeiger
+            }
+
+            // MITTELPUNKT
+            for (let r = 0; r <= 0.12; r += 0.01) {
+                for (let t = 0; t <= 2 * Math.PI; t += 0.1) {
+                    putPixel(r * Math.cos(t), r * Math.sin(t), 0, 0, 0, 2);
+                }
+            }
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////
+        // ENDE ZEICHENBEREICH ////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////
+
+        zeichnen();
+    </script>
+</body>
+
+</html>
