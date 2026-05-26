@@ -139,9 +139,16 @@
         async function zeichnen() {
             // drawCoordinateSystem();
 
+            // Uhrzeit
+            let h = 10;     // Stunden
+            let m = 10;     // Minuten
+            let s = 30;     // Sekunden
+
+            let sekundenZeiger = true;     // toggle Sekundenzeiger
+
             // Ziffernblatt
             for (let t = 0; t <= (2 * Math.PI); t += 0.001) {
-                putPixel(4 * Math.cos(t), 4 * Math.sin(t), 0, 0, 0, 4);
+                putPixel(4 * Math.cos(t), 4 * Math.sin(t), 0, 0, 0, 7);
             }
 
             // Minuten- und Stundenstriche (60x)
@@ -185,15 +192,29 @@
                 putText(stunde.toString(), xZahl, yZahl, 0, 0, 0, groesse);
             }
 
-            // MINUTENZEIGER (senkrecht)
-            for (let l = 0; l <= 3.5; l += 0.01) {
-                putPixel(0, l, 0, 0, 255, 4); // Blauer Zeiger
+            // ZEIGER Positionen
+            let winkelSekunde = (Math.PI/2) - s * (Math.PI/30);
+            let winkelMinute  = (Math.PI/2) - m * (Math.PI/30);
+            let winkelStunde  = (Math.PI/2) - h * (Math.PI/6);
+
+            // SEKUNDENZEIGER
+            if (sekundenZeiger) {
+                for (let l = 0; l <= 3.8; l += 0.01) {
+                    let x = l * Math.cos(winkelSekunde);
+                    let y = l * Math.sin(winkelSekunde);
+                    putPixel(x, y, 255, 255, 0, 2); // Gelber Zeiger                
+                }
             }
 
-            // STUNDENZEIGER für (14:00)
-            const winkelStunde = Math.PI / 6; // Winkel pro Stunde
+            // MINUTENZEIGER
+            for (let l = 0; l <= 2.5; l += 0.01) {
+                let x = l * Math.cos(winkelMinute);
+                let y = l * Math.sin(winkelMinute);
+                putPixel(x, y, 0, 0, 255, 4); // Blauer Zeiger
+            }
 
-            for (let l = 0; l <= 2.3; l += 0.01) {
+            // STUNDENZEIGER
+            for (let l = 0; l <= 2.1; l += 0.01) {
                 let x = l * Math.cos(winkelStunde);
                 let y = l * Math.sin(winkelStunde);
                 putPixel(x, y, 255, 0, 0, 6); // Roter Zeiger
