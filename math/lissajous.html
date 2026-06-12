@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MathPlot</title>
-    <link rel="icon" href="./media/favicon2.png" type="img/png">
+    <title>Lissajous</title>
+    <link rel="icon" href="../media/favicon2.png" type="img/png">
     <link rel="stylesheet" href="./style.css" type="text/css">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 
@@ -139,30 +139,12 @@
         async function zeichnen() {
             drawCoordinateSystem();
 
-            for (let t = 0; t <= 1; t += 0.001) {
-                let x = -4 + t * 9;
-                let y = -2 + t * 3;
+            for (let t = 0; t <= 5 * Math.PI; t += 0.005) {
+                let x = Math.sin(t - Math.PI / 8);
+                let y = 2 * Math.sin(2 * t);
                 putPixel(x, y, 255, 0, 0, 2);
                 //await sleep(1);
             }
-
-            //putText("Gerade", 6.1, 1.1, 255, 0, 0, 16);
-
-            for (let t = 0; t <= (2 * Math.PI); t += 0.001) {
-                putPixel(2 * Math.cos(t) - 3, 2 * Math.sin(t) + 1, 0, 0, 255, 1);
-                //if (Math.floor(1000*t)%10 == 0)
-                //    await sleep(1);
-            }
-
-            for (let t = 0; t < 5 * Math.PI; t += 0.001) {
-                let x = 0.1 * t * Math.cos(t);
-                let y = 0.1 * t * Math.sin(t);
-                putPixel(x, y, 255, 0, 255, 2);
-                if (Math.floor(1000 * t) % 100 == 0)
-                    await sleep(1);
-            }
-
-            // Statische Uhrzeit:   14:00
         }
 
         ///////////////////////////////////////////////////////////////////////////////
