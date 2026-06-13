@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>a-Site Math</title>
+        <link rel="icon" href="../media/favicon2.png" type="img/png">
+        <link rel="stylesheet" href="../style.css" type="text/css">
+    </head>
+    <body>
+        <div class="navbar">
+            <ul>
+                <li> <a href="../home.html">Home</a> </li>
+                <li> <a class="active" href="./home.html">Math</a> </li>
+                <li class="logout"> <a href="./index.html">Logout</a> </li>
+                <li class="steepangle"> <a href="https://steepangle.uk">steepangle AG</a></li>
+            </ul>
+        </div>
+
+        <div class="main-content">
+            <div class="home-container">
+                <h1>Math Links</h1>
+                <ul>
+                    <li><a target="_blank" href="./home.html">MATH HOME</a></li>
+                    <li><a target="_blank" href="./plot-stuff.html">Parameterdarstellung</a></li>
+                    <li><a target="_blank" href="./clock.html">Uhr</a></li>
+                    <li><a target="_blank" href="./clock-realtime.html">Uhr - Echtzeit</a></li>
+                    <li><a target="_blank" href="./lissajous.html">Lissajous Figur</a></li>
+                </ul>
+            </div>
+
+            <div class="home-container">
+                <h1>Parameterdarstellung</h1>
+                <p>Parameterdarstellung einer Geraden & anderer Stuff</p>
+                <iframe
+                    src="./plot-stuff.html"
+                    frameborder="0"
+                    width="100%"
+                    height="400px"
+                ></iframe>
+            </div>
+
+            <div class="home-container">
+                <h1>Uhr</h1>
+                <p>Uhrzeit einstellbar per <i>java-script</i> Variabel ( h, m, s ).</p>
+                <iframe
+                    src="./clock.html"
+                    frameborder="0"
+                    width="100%"
+                    height="400px"
+                ></iframe>
+                <p>Sekundenzeiger per Variabel ( tickTack ) einstellbar, Ticken oder Schweben.</p>
+                <iframe
+                    src="./clock-realtime.html"
+                    frameborder="0"
+                    width="100%"
+                    height="400px"
+                ></iframe>
+            </div>
+
+            <div class="home-container">
+                <h1>Lissajous-Figur</h1>
+                <p>
+                    x(t) = sin(t - &pi;/8) <br>
+                    y(t) = 2 sin(2t)
+                </p>
+                <iframe
+                    src="./lissajous.html"
+                    frameborder="0"
+                    width="100%"
+                    height="400px"
+                ></iframe>
+            </div>
+        </div>
+
+        <script src="./script/login.js"></script>
+    </body>
+</html>
