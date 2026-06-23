@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PieChart</title>
+    <link rel="icon" href="../media/favicon2.png" type="img/png">
+    <link rel="stylesheet" href="./mathplot.css" type="text/css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+</head>
+
+<body>
+
+    <canvas id="mathCanvas"></canvas>
+
+    <script>
+        // --- 1. EINSTELLUNGEN ---
+        const WIDTH = 1600;
+        const HEIGHT = 1000;
+
+        const x1 = -8;
+        const x2 = 8;
+        const y1 = -5;
+        const y2 = 5;
+
+        // --- 2. CANVAS INITIALISIEREN ---
+        const canvas = document.getElementById('mathCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = WIDTH;
+        canvas.height = HEIGHT;
+
+        function mathToCanvas(mathX, mathY) {
+            const cx = ((mathX - x1) / (x2 - x1)) * WIDTH;
+            const cy = HEIGHT - ((mathY - y1) / (y2 - y1)) * HEIGHT;
+            return { cx, cy };
+        }
+
+        // --- 3. FUNKTIONEN: putPixel und putText---
+        function putPixel(x, y, r, g, b, thickness = 1) {
+            const { cx, cy } = mathToCanvas(x, y);
+            ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+            ctx.fillRect(cx - thickness / 2, cy - thickness / 2, thickness, thickness);
+        }
+
+        function putText(text, x, y, r, g, b, size = 16) {
+            // 1. Mathe-Koordinaten in Canvas-Pixel umrechnen
+            const { cx, cy } = mathToCanvas(x, y);
+
+            // 2. Farbe und Schriftart setzen
+            ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+            ctx.font = `${size}px Arial, sans-serif`;
+
+            // 3. Ausrichtung anpassen (damit der Text genau auf dem Punkt (x,y) sitzt)
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+
+            // 4. Text auf die Canvas zeichnen
+            ctx.fillText(text, cx, cy);
+        }
+
+        // --- 4. KOORDINATENSYSTEM ZEICHNEN ---
+        function drawCoordinateSystem() {
+            ctx.strokeStyle = "#ccc";
+            ctx.fillStyle = "#333";
+            ctx.font = "14px Arial";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+
+            const origin = mathToCanvas(0, 0);
+
+            ctx.beginPath();
+            ctx.moveTo(0, origin.cy);
+            ctx.lineTo(WIDTH, origin.cy);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(origin.cx, 0);
+            ctx.lineTo(origin.cx, HEIGHT);
+            ctx.stroke();
+
+            for (let i = Math.ceil(x1); i <= Math.floor(x2); i++) {
+                const pos = mathToCanvas(i, 0);
+                ctx.beginPath();
+                ctx.moveTo(pos.cx, origin.cy - 5);
+                ctx.lineTo(pos.cx, origin.cy + 5);
+                ctx.stroke();
+                if (i !== 0) ctx.fillText(i, pos.cx, origin.cy + 15);
+            }
+
+            for (let i = Math.ceil(y1); i <= Math.floor(y2); i++) {
+                const pos = mathToCanvas(0, i);
+                ctx.beginPath();
+                ctx.moveTo(origin.cx - 5, pos.cy);
+                ctx.lineTo(origin.cx + 5, pos.cy);
+                ctx.stroke();
+                if (i !== 0) ctx.fillText(i, origin.cx - 15, pos.cy);
+            }
+        }
+
+        // --- 5. clearCanvas ---
+        function clearCanvas() {
+            // Löscht alles von den Koordinaten (0,0) bis zur maximalen Breite und Höhe
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // Hilfsfunktion sleep
+        function sleep(ms) {
+            return new Promise(function (resolve) {
+                setTimeout(resolve, ms);
+            });
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////
+        // NUR INNEHALB DER NACHFOLGENDEN FUNKTION ZEICHNEN DARF ETWAS VERÄNDERT WERDEN
+        // UND ES SIND NUR FOLGENDE DINGE ERLAUB:
+        //    * putPixel(...)
+        //    * putText(...)
+        //    * clearCanvas()
+        //    * await sleep(Millisekunden)
+        //    * Variablendefinitionen, Schleifen, Fallunterscheidungen (if-else)
+        //    * drawCoordinateSystem() auskommentieren oder nicht
+        //    * Kommentare
+        ///////////////////////////////////////////////////////////////////////////////
+        // ANFANG ZEICHENBEREICH //////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////
+
+        // --- HILFSFUNKTION FÜR KREISDIAGRAMME ---
+        // x, y: Mittelpunkt
+        // radius: Größe des Diagramms
+        // data: Array mit Werten, z.B. [40, 25, 20, 15]
+        // colors: Array mit RGB-Objekten, z.B. [{r:255, g:0, b:0}, ...]
+        function drawPieChart(x, y, radius, data, colors) {
+            // Gesamtsumme der Daten berechnen
+            const total = data.reduce((sum, value) => sum + value, 0);
+            
+            let startWinkel = 0;
+
+            // Jedes Segment (Kuchenstück) durchlaufen
+            for (let i = 0; i < data.length; i++) {
+                // Anteil des aktuellen Segments am Kreis berechnen
+                const segmentWinkel = (data[i] / total) * 2 * Math.PI;
+                const endWinkel = startWinkel + segmentWinkel;
+                const color = colors[i % colors.length]; // Farbe wählen
+
+                // Das Segment zeichnen, indem wir von innen nach außen Linien ziehen
+                for (let r = 0; r <= radius; r += 0.02) {
+                    // Schrittweite an den Radius anpassen, damit keine Lücken entstehen
+                    const winkelSchritt = 0.01 / (r + 0.1); 
+                    
+                    for (let w = startWinkel; w <= endWinkel; w += winkelSchritt) {
+                        let px = x + r * Math.cos(w);
+                        let py = y + r * Math.sin(w);
+                        putPixel(px, py, color.r, color.g, color.b, 2);
+                    }
+                }
+
+                // Startwinkel für das nächste Segment aktualisieren
+                startWinkel = endWinkel;
+            }
+        }
+
+        async function zeichnen() {
+            // drawCoordinateSystem();
+
+            // Daten und Farben definieren
+            const diagrammData = [45, 25, 20, 10];
+            
+            const diagrammColors = [
+                { r: 255, g: 99,  b: 132 }, // Rot/Rosa
+                { r: 54,  g: 162, b: 235 }, // Blau
+                { r: 255, g: 206, b: 86  }, // Gelb
+                { r: 75,  g: 192, b: 192 }  // Grün
+            ];
+
+            // Kreisdiagramm zeichnen
+            // Parameter: Mittelpunkt 0, 0, Radius 3.5
+            drawPieChart(0, 0, 3.5, diagrammData, diagrammColors);
+
+            // Beschriftung
+            putText("Projekt A (45%)",  0,    4, 0, 0, 0, 20);
+            putText("Projekt B (25%)", -4,   -2, 0, 0, 0, 20);
+            putText("Projekt C (20%)",  2,   -4, 0, 0, 0, 20);
+            putText("Projekt D (10%)",  4, -1.5, 0, 0, 0, 20);
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////
+        // ENDE ZEICHENBEREICH ////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////
+
+        zeichnen();
+    </script>
+</body>
+
+</html>
