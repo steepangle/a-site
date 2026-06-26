@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Uhr</title>
+    <link rel="icon" href="../media/favicon2.png" type="img/png">
+    <link rel="stylesheet" href="./mathplot.css" type="text/css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+</head>
+
+<body>
+    
+<canvas id="mathCanvas"></canvas>
+<button class="text-button" onclick="audioAbspielen()">Audio abspielen</button>
+
+<script>
+    // --- 1. EINSTELLUNGEN ---
+    const WIDTH = 1600;
+    const HEIGHT = 1000;
+    
+    const x1 = -8;
+    const x2 = 8;
+    const y1 = -5;
+    const y2 = 5;
+
+    // --- 2. CANVAS INITIALISIEREN ---
+    const canvas = document.getElementById('mathCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = WIDTH;
+    canvas.height = HEIGHT;
+
+    function mathToCanvas(mathX, mathY) {
+        const cx = ((mathX - x1) / (x2 - x1)) * WIDTH;
+        const cy = HEIGHT - ((mathY - y1) / (y2 - y1)) * HEIGHT;
+        return { cx, cy };
+    }
+
+    // --- 3. FUNKTIONEN: putPixel und putText---
+    function putPixel(x, y, r, g, b, thickness = 1) {
+        const { cx, cy } = mathToCanvas(x, y);
+        ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+        ctx.fillRect(cx - thickness / 2, cy - thickness / 2, thickness, thickness);
+    }
+    
+    function putText(text, x, y, r, g, b, size = 16) {
+        // 1. Mathe-Koordinaten in Canvas-Pixel umrechnen
+        const { cx, cy } = mathToCanvas(x, y);
+    
+        // 2. Farbe und Schriftart setzen
+        ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+        ctx.font = `${size}px Arial, sans-serif`;
+    
+        // 3. Ausrichtung anpassen (damit der Text genau auf dem Punkt (x,y) sitzt)
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+    
+        // 4. Text auf die Canvas zeichnen
+        ctx.fillText(text, cx, cy);
+    }
+
+    // --- 4. KOORDINATENSYSTEM ZEICHNEN ---
+    function drawCoordinateSystem() {
+        ctx.strokeStyle = "#ccc";
+        ctx.fillStyle = "#333";
+        ctx.font = "14px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+
+        const origin = mathToCanvas(0, 0);
+
+        ctx.beginPath();
+        ctx.moveTo(0, origin.cy);
+        ctx.lineTo(WIDTH, origin.cy);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(origin.cx, 0);
+        ctx.lineTo(origin.cx, HEIGHT);
+        ctx.stroke();
+
+        for (let i = Math.ceil(x1); i <= Math.floor(x2); i++) {
+            const pos = mathToCanvas(i, 0);
+            ctx.beginPath();
+            ctx.moveTo(pos.cx, origin.cy - 5);
+            ctx.lineTo(pos.cx, origin.cy + 5);
+            ctx.stroke();
+            if (i !== 0) ctx.fillText(i, pos.cx, origin.cy + 15);
+        }
+
+        for (let i = Math.ceil(y1); i <= Math.floor(y2); i++) {
+            const pos = mathToCanvas(0, i);
+            ctx.beginPath();
+            ctx.moveTo(origin.cx - 5, pos.cy);
+            ctx.lineTo(origin.cx + 5, pos.cy);
+            ctx.stroke();
+            if (i !== 0) ctx.fillText(i, origin.cx - 15, pos.cy);
+        }
+    }
+
+    // --- 5. clearCanvas ---
+    function clearCanvas() {
+        // Löscht alles von den Koordinaten (0,0) bis zur maximalen Breite und Höhe
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  
+    // --- 6. AUDIO FUNKTION ---
+    // mathFunc: Eine anonyme Funktion (Pfeil-Notation), die das Signal in Abhängigkeit von t berechnet
+    // tStart: Startzeitpunkt für t (in Sekunden)
+    // tEnd: Endzeitpunkt für t (in Sekunden)
+    let audioCtx = null; // audioCtx AUSSERHALB der Funktion deklarieren
+    function playSound(mathFunc, tStart, tEnd) {
+        // Nur initialisieren, wenn es noch keinen AudioContext gibt
+        if (!audioCtx) {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            audioCtx = new AudioContext();
+        }
+
+        const sampleRate = audioCtx.sampleRate; 
+        const duration = tEnd - tStart;
+        
+        if (duration <= 0) return;
+
+        const frameCount = Math.floor(sampleRate * duration);
+        const buffer = audioCtx.createBuffer(1, frameCount, sampleRate);
+        const channelData = buffer.getChannelData(0);
+
+        for (let i = 0; i < frameCount; i++) {
+            const t = tStart + (i / sampleRate);
+            channelData[i] = mathFunc(t);
+        }
+
+        const source = audioCtx.createBufferSource();
+        source.buffer = buffer;
+        source.connect(audioCtx.destination);
+        source.start();
+    }
+
+    // Hilfsfunktion sleep
+    function sleep(ms) {
+        return new Promise(function(resolve) {
+            setTimeout(resolve, ms);
+        });
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // NUR INNERHALB DER NACHFOLGENDEN FUNKTIONEN ZEICHNEN UND AUDIOABSPIELEN DARF
+    // ETWAS VERÄNDERT WERDEN UND ES SIND NUR FOLGENDE DINGE ERLAUB:
+    //    * putPixel(...)
+    //    * putText(...)
+    //    * clearCanvas()
+    //    * playSound(...)
+    //    * await sleep(Millisekunden)
+    //    * Variablendefinitionen, Schleifen, Fallunterscheidungen (if-else)
+    //    * drawCoordinateSystem() auskommentieren oder nicht
+    //    * Kommentare
+    ///////////////////////////////////////////////////////////////////////////////
+    // ANFANG ZEICHENBEREICH / AUDIOBEREICH
+    ///////////////////////////////////////////////////////////////////////////////
+
+    async function zeichnen() {
+        // We will store the active note in a global window variable 
+        // so the audio function and drawing function can talk to each other.
+        window.currentNoteIndex = -1; 
+
+        // Define our synth note names to display on screen
+        const noteNames = ["A3", "C#4", "E4", "A4", "C#5"];
+
+        while (1==1) {
+            clearCanvas();
+            // We'll skip drawCoordinateSystem() to make it look like a clean UI dashboard!
+            
+            // Draw a neat title for our Synthesizer
+            putText("--- MAKESHIFT MATH SYNTHESIZER ---", 0, 4, 255, 255, 255, 24);
+            putText("Click 'Audio abspielen' to trigger the sequence", 0, 3.3, 150, 150, 150, 14);
+
+            // Draw 5 synthesizer visual "keys/pads" spanning horizontally
+            for (let i = 0; i < 5; i++) {
+                let padX = -6 + (i * 3); // Spreads pads across X-axis from -6 to 6
+                let padY = -1;
+
+                // Check if this specific note is currently being triggered by the audio engine
+                let isActive = (window.currentNoteIndex === i);
+                let r = isActive ? 0 : 60;
+                let g = isActive ? 255 : 60;
+                let b = isActive ? 150 : 80;
+
+                // Draw a nice filled box using pixels for the key
+                for (let dx = -1.2; dx <= 1.2; dx += 0.05) {
+                    for (let dy = -1.5; dy <= 1.5; dy += 0.05) {
+                        putPixel(padX + dx, padY + dy, r, g, b, 3);
+                    }
+                }
+
+                // Overlay the note name label over the pad
+                putText(noteNames[i], padX, padY, 255, 255, 255, 18);
+            }
+
+            // Draw a subtle, scrolling visual oscilloscope wave at the bottom just for style
+            const jetzt = new Date();
+            let wavePhase = jetzt.getTime() * 0.005;
+            for (let wx = -7; wx <= 7; wx += 0.1) {
+                let wy = -4 + Math.sin(wx * 2 + wavePhase) * 0.4;
+                putPixel(wx, wy, 0, 255, 150, 2);
+            }
+
+            // Keep the clock readout running on top
+            let h = jetzt.getHours();
+            let m = jetzt.getMinutes();
+            let s = jetzt.getSeconds();
+            let ms = jetzt.getMilliseconds();
+            putText("System Time: " + String(h).padStart(2, "0") + ":" + String(m).padStart(2, "0") + ":"
+                    + String(s).padStart(2, "0") + "." + String(ms).padStart(3, "0"), 6, 4.5, 200, 200, 200, 12);
+            
+            await sleep(30); // ~30 FPS UI redraw rate
+        }
+    }
+  
+    async function audioAbspielen() {
+        // Frequencies for an A Major chord sweep: A3 (220Hz), C#4 (277.18Hz), E4 (329.63Hz), A4 (440Hz), C#5 (554.37Hz)
+        const frequencies = [220, 220 * Math.pow(2, 4/12), 220 * Math.pow(2, 7/12), 440, 440 * Math.pow(2, 4/12)];
+        
+        // --- SYNTHESIZER ENGINE GENERATOR ---
+        // Generates a rich "Sawtooth/Square" hybrid texture instead of a pure sterile sine wave
+        const synthEngine = (freq) => {
+            return (t) => {
+                // Main Fundamental oscillator (Square wave behavior)
+                let osc1 = Math.sin(freq * 2 * Math.PI * t) >= 0 ? 0.15 : -0.15;
+                // Sub-harmonic oscillator 1 octave down for heavy synth warmth
+                let subOsc = Math.sin((freq / 2) * 2 * Math.PI * t) >= 0 ? 0.1 : -0.1;
+                // Subtle detuned overtone oscillator for that rich analog chorus effect
+                let detune = 0.08 * Math.sin((freq * 1.01) * 2 * Math.PI * t);
+                
+                // Exponential volume decay envelope so notes ring out like a real instrument
+                let envelope = Math.exp(-2.5 * t); 
+                
+                return (osc1 + subOsc + detune) * envelope;
+            };
+        };
+
+        // Run through our 5-note arpeggiator sequence step-by-step
+        for (let step = 0; step < 5; step++) {
+            window.currentNoteIndex = step; // Signal to the visualizer drawing function to highlight this key
+            
+            // Play the synth note using our custom math formula engine
+            playSound(synthEngine(frequencies[step]), 0, 1.5);
+            
+            await sleep(250); // Pause 250ms before triggering the next step in the rhythm
+        }
+
+        // Leave the final key highlighted briefly, then turn it off
+        await sleep(500);
+        window.currentNoteIndex = -1;
+    }
+  
+    ///////////////////////////////////////////////////////////////////////////////
+    // ENDE ZEICHENBEREICH / AUDIOBEREICH
+    ///////////////////////////////////////////////////////////////////////////////
+
+    zeichnen();
+</script>
+</body>
+</html>
