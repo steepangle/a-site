@@ -1,0 +1,98 @@
+:root{
+  --green:#1f6f5b;
+  --light:#eef5f1;
+  --text:#18352d;
+  --border:#d8e2dd;
+  --bg:#f6f8f6;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+header{background:linear-gradient(135deg,#17483b,#2b8068);color:white;padding:42px 24px}
+.wrap{max-width:1200px;margin:auto}
+h1{margin:0 0 8px;font-size:42px}
+header p{margin:0;max-width:800px}
+main{padding:30px 24px 60px}
+.intro{background:white;border:1px solid var(--border);padding:20px;border-radius:14px;margin-bottom:28px}
+.category{background:white;border:1px solid var(--border);border-radius:16px;margin:20px 0;overflow:hidden;box-shadow:0 5px 18px rgba(0,0,0,.05)}
+.category-head{padding:18px 22px;background:var(--light);border-bottom:1px solid var(--border)}
+.category-head h2{margin:0;font-size:25px}
+.category-head p{margin:5px 0 0;color:#65736e}
+.places{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;padding:20px}
+ 
+/* ORTSFARBEN */
+.place-btn{
+  display:block;
+  text-align:center;
+  text-decoration:none;
+  padding:15px 10px;
+  border-radius:10px;
+  font-weight:bold;
+  transition:all .15s ease;
+  border:2px solid;
+}
+
+/* SKG Region = Gelb/Schwartz */
+.place-region{
+  background:#FFDD00 !important;
+  color:#3C3C3C !important;
+  border-color:#d3b703 !important;
+}
+
+/* Salzburg = Gelb/Schwartz */
+.place-salzburg{
+  background:#A52522 !important;
+  color:#FFFFFF !important;
+  border-color:#7e1c1b !important;
+}
+
+/* Ebenau = Blau */
+.place-ebenau{
+  background:#D32F2F !important;
+  color:#FFFFFF !important;
+  border-color:#B71C1C !important;
+}
+ 
+/* Faistenau = Grün */
+.place-faistenau{
+  background:#388E3C !important;
+  color:#FFFFFF !important;
+  border-color:#1B5E20 !important;
+}
+ 
+/* Fuschl am See = Türkis */
+.place-fuschl{
+  background:#0288D1 !important;
+  color:#FFFFFF !important;
+  border-color:#01579B !important;
+}
+ 
+/* Hintersee = Violett */
+.place-hintersee{
+  background:#7B1FA2 !important;
+  color:#FFFFFF !important;
+  border-color:#4A148C !important;
+}
+ 
+/* Hof bei Salzburg = Orange */
+.place-hof{
+  background:#F57C00 !important;
+  color:#FFFFFF !important;
+  border-color:#E65100 !important;
+}
+ 
+/* Koppl = Rosé */
+.place-koppl{
+  background:#C2185B !important;
+  color:#FFFFFF !important;
+  border-color:#880E4F !important;
+}
+ 
+.place-btn:hover{
+  filter:brightness(.94);
+  transform:translateY(-2px);
+  box-shadow:0 5px 12px rgba(0,0,0,.12);
+}
+.note{font-size:13px;color:#697872;margin-top:25px}
+footer{border-top:1px solid var(--border);padding:25px;color:#697872}
+@media(max-width:900px){.places{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:550px){h1{font-size:32px}.places{grid-template-columns:repeat(2,1fr)}}
