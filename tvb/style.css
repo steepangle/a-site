@@ -31,6 +31,13 @@ main{padding:30px 24px 60px}
   border:2px solid;
 }
 
+/* outdooractive = schwartz grün */
+.place-oa{
+  background:#272727 !important;
+  color:#A5B339 !important;
+  border-color:#8d9931 !important;
+}
+
 /* SKG Region = Gelb/Schwartz */
 .place-region{
   background:#FFDD00 !important;
