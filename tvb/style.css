@@ -5,8 +5,18 @@
   --border:#d8e2dd;
   --bg:#f6f8f6;
 }
+
+@font-face {
+  font-family: 'Displace';
+  src: url('../media/font/Displace/DisplaceKC.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+body{margin:0;background:var(--bg);color:var(--text);font-family: 'Displace',Arial,Helvetica,sans-serif}
 header{background:linear-gradient(135deg,#17483b,#2b8068);color:white;padding:42px 24px}
 .wrap{max-width:1200px;margin:auto}
 h1{margin:0 0 8px;font-size:42px}
