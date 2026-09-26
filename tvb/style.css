@@ -123,6 +123,18 @@ main{padding:30px 24px 60px}
   border-color:#501427 !important;
 }
 
+.char-aly{
+  background:#93ACA2 !important;
+  color:white !important;
+  border-color:#6F1B23 !important;
+}
+
+.char-rai{
+  background:#8160EC !important;
+  color:#F8DAFF !important;
+  border-color:#4E3496 !important;
+}
+
 .note{font-size:13px;color:#697872;margin-top:25px}
 footer{border-top:1px solid var(--border);padding:25px;color:#697872}
 @media(max-width:900px){.places{grid-template-columns:repeat(3,1fr)}}
